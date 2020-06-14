@@ -1,6 +1,6 @@
 package com.example.memoriesglasses;
 
-public class LocationHelper {
+public class LocationHelper<Longitude, Latitude> {
 
     private double Longitude;
     private double Latitude;
@@ -9,6 +9,8 @@ public class LocationHelper {
         Longitude = longitude;
         Latitude = latitude;
     }
+
+
 
     public double getLongitude() {
         return Longitude;
