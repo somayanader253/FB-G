@@ -6,17 +6,17 @@ import androidx.core.app.NotificationCompat;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Ringtone;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     //Uri notification;
     //Ringtone r;
     Button btnStart;
-
+    Animation topAnim, bottomAnim;
+    ImageView image;
+    TextView logo;
+    TextView slogan;
 
     public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("user_one");
 
@@ -38,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
+        bottomAnim = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
+        image = findViewById(R.id.imageView);
+        logo = findViewById(R.id.txtLogo);
+        slogan = findViewById(R.id.txtSolgan);
+
+        image.setAnimation(bottomAnim);
+        logo.setAnimation(topAnim);
+        slogan.setAnimation(topAnim);
+
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setDefaults(NotificationCompat.DEFAULT_ALL).setSmallIcon(R.drawable.pd)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.pd))
+                .setDefaults(NotificationCompat.DEFAULT_ALL).setSmallIcon(R.drawable.imageedit_35_6864498887__1_)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.imageedit_35_6864498887__1_))
                 .setContentTitle("Location Changed")
                 .setContentText("Tap to get Current Location")
                 .setAutoCancel(true)

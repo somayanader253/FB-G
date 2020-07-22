@@ -189,8 +189,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Intent myIntent = new Intent(MapsActivity.this, MainActivity2.class);
-                        startActivity(myIntent);
+                        //Intent myIntent = new Intent(MapsActivity.this, MainActivity2.class);
+                        //startActivity(myIntent);
 
                     }
                 });
