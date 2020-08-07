@@ -1,7 +1,20 @@
 <resources>
-    <string name="app_name">Memories Glasses</string>
+    <string name="app_name">FB GLASSES TRACKER</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_retrieve_map">Map</string>
     <string name="start_tracking">Start Tracking</string>
     <string name="todo">TODO</string>
+    <string name="Back_Button">Back</string>
+    <string name="description">FB GLASSES TRACKER Application to track the location of FB Glasses.</string>
+    <string name="Home_Text">Home Location Button:</string>
+    <string name="desc1">For detecting the home location where the patient is staying.</string>
+    <string name="desc2">When the location is detected, press save if you are sure about this location.</string>
+    <string name="PD_Text">FB.G. Location Button:</string>
+    <string name="desc3">To get the current location of FB Glasses.</string>
+    <string name="home_location_button">Home Location</string>
+    <string name="pd_location_button">PD Location</string>
+    <string name="address_text">Home Address</string>
+    <string name="info">\?</string>
+    <string name="description1">FB Glasses Tracker Application</string>
+    <string name="fb_location">FB.G. Location</string>
 </resources>

@@ -59,7 +59,6 @@ public class RetrieveMapActivity extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //final String[] Tag = new String[1];
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("user_one");
         ValueEventListener listener = databaseReference.addValueEventListener(new ValueEventListener() {
@@ -67,8 +66,8 @@ public class RetrieveMapActivity extends FragmentActivity implements OnMapReadyC
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
-                String latitude2 = dataSnapshot.child("Somaya").child("latitude").getValue().toString();
-                String longitude2 = dataSnapshot.child("Somaya").child("longitude").getValue().toString();
+                String latitude2 = dataSnapshot.child("location").child("lat_updated").getValue().toString();
+                String longitude2 = dataSnapshot.child("location").child("lng_updated").getValue().toString();
 
 
                 Double latCurrent = Double.parseDouble(latitude2);
@@ -78,22 +77,6 @@ public class RetrieveMapActivity extends FragmentActivity implements OnMapReadyC
 
                 mMap.addMarker(new MarkerOptions().position(location).title(getAddress(location)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14F));
-
-                //Tag[0] = "Location is: " + latCurrent + ", " + lngCurrent;
-                //Toast.makeText(RetrieveMapActivity.this, Tag[0], Toast.LENGTH_LONG).show();
-
-                String latitude1 = dataSnapshot.child("Home").child("latitude").getValue().toString();
-                String longitude1 = dataSnapshot.child("Home").child("longitude").getValue().toString();
-
-                //Double latHome = Double.parseDouble(latitude1);
-                //Double lngHome = Double.parseDouble(longitude1);
-
-
-
-                //getMetersFromLatLong(latHome, lngHome, latCurrent, lngCurrent);
-
-                //getAddress(location);
-
 
             }
 
@@ -106,46 +89,6 @@ public class RetrieveMapActivity extends FragmentActivity implements OnMapReadyC
     }
 
 
-
-        /*public double getMetersFromLatLong(double lat1, double lng1, double lat2, double lng2) {
-
-            double theta = lng1 - lng2;
-            double dist = Math.sin(deg2rad(lat1))
-                    * Math.sin(deg2rad(lat2))
-                    + Math.cos(deg2rad(lat1))
-                    * Math.cos(deg2rad(lat2))
-                    * Math.cos(deg2rad(theta));
-            dist = Math.acos(dist);
-            dist = rad2deg(dist);
-            dist = dist * 60 * 1.1515 * 1.6 * 1000;
-            int distBetweenTwoLocations = (int) Math.rint(dist);
-
-            String Tag = String.valueOf(distBetweenTwoLocations);
-
-            if(dist >= 200){
-                Toast.makeText(this, "The Distance between them is : "+ Tag + " meters", Toast.LENGTH_LONG).show();
-                notificationCall();
-            }
-            else{
-                Toast.makeText(this, Tag, Toast.LENGTH_SHORT).show();
-            }
-
-            return dist;
-
-        }
-
-
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }*/
-
-
         private String getAddress(LatLng homeLocation) {
             String homeAddress = "";
             Geocoder geocoder = new Geocoder(RetrieveMapActivity.this, Locale.getDefault());
@@ -153,31 +96,11 @@ public class RetrieveMapActivity extends FragmentActivity implements OnMapReadyC
                 List<Address> addresses = geocoder.getFromLocation(homeLocation.latitude, homeLocation.longitude, 1);
                 String address = addresses.get(0).getAddressLine(0);
                 homeAddress = addresses.get(0).getLocality();
-                String myAddress = address.toString();
-
-                //mMap.addMarker(new MarkerOptions().position(homeLocation).title(myAddress));
-                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLocation, 14F));
-
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return homeAddress;
         }
-    /*public void notificationCall(){
-        Intent intent = new Intent(this, RetrieveMapActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setDefaults(NotificationCompat.DEFAULT_ALL).setSmallIcon(R.drawable.pd)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.pd))
-                .setContentTitle("Location Changed")
-                .setContentText("Tap to get Current Location")
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notificationBuilder.build());
-    }*/
 
 }

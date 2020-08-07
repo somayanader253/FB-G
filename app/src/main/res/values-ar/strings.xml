@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FB GLASSES TRACKER</string>
+    <string name="title_activity_maps">خريطة</string>
+    <string name="title_activity_retrieve_map">خريطة</string>
+    <string name="start_tracking">بدء التتبع</string>
+    <string name="todo">TODO</string>
+    <string name="Back_Button">الرجوع</string>
+    <string name="description">تطبيق PD Tracker لتتبع موقع الجهاز </string>
+    <string name="Home_Text">زر موقع المنزل:</string>
+    <string name="desc1">لتحديد موقع المنزل الذي يقيم فيه المريض</string>
+    <string name="desc2">عند الكشف عن الموقع، اضغط على حفظ إذا كنت متأكدًا من هذا الموقع.</string>
+    <string name="PD_Text">زر موقع الجهاز:</string>
+    <string name="desc3">لمعرفه الموقع الحالي للجهاز</string>
+    <string name="home_location_button">موقع المنزل</string>
+    <string name="pd_location_button">موقع الجهاز</string>
+    <string name="address_text">عنوان المنزل</string>
+    <string name="info">\؟</string>
+    <string name="description1">تطبيق تتبع FB Glasses</string>
+    <string name="fb_location">موقع الجهاز</string>
+
+</resources>

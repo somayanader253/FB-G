@@ -15,7 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Bundle;
+import android.os.Bundle;  //to pass data between activities, the data to be passed are mapped to string key and retrieved by other activity
 import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -35,14 +35,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
-import com.karumi.dexter.Dexter;
+import com.karumi.dexter.Dexter;                                    //to simplify the permission to the user
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-import java.io.IOException;
+import java.io.IOException;  // to handle failure
 import java.util.List;
 import java.util.Locale;
 
@@ -159,8 +159,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        //LatLng homeLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                        //String address = getAddress(homeLocation);
 
                         final LocationHelper helper = new LocationHelper(
                                 mLocation.getLongitude(),
@@ -197,27 +195,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog.show();
     }
 
-
-
-   /* private String getAddress(LatLng homeLocation) {
-        String homeAddress = "";
-        Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(homeLocation.latitude, homeLocation.longitude, 1);
-            String address = addresses.get(0).getAddressLine(0);
-            homeAddress = addresses.get(0).getLocality();
-            String myAdress = address.toString();
-            String ADDRESS = "ADDRESS";
-            Intent outIntent = new Intent(MapsActivity.this, MainActivity2.class);
-            outIntent.putExtra(ADDRESS, myAdress);
-            startActivity(outIntent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return homeAddress;
-    }*/
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -230,7 +207,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
 
 
         if(latLng!=null){
@@ -329,10 +305,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             homeAddress = addresses.get(0).getLocality();
             String myAddress = address.toString();
             String ADDRESS = "ADDRESS";
-
-            //mMap.addMarker(new MarkerOptions().position(latLng).title(myAddress));
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,14F));
-
 
 
         } catch (IOException e) {

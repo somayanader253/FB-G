@@ -1,14 +1,20 @@
 package com.example.memoriesglasses;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,9 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    //BroadcastReceiver receiver;
-    //Uri notification;
-    //Ringtone r;
     Button btnStart;
     Animation topAnim, bottomAnim;
     ImageView image;
@@ -62,25 +65,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-        /*receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                databaseReference.child("Alert").setValue(1);
-               try {
-                   Toast.makeText(context, "PATIENT ISN'T HOME", Toast.LENGTH_SHORT).show();
-               }catch (Exception e) {
-                   e.printStackTrace();
-               }
-            }
-        };*/
-
         ValueEventListener listener = databaseReference.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String latitude2 = dataSnapshot.child("Somaya").child("latitude").getValue().toString();
-                String longitude2 = dataSnapshot.child("Somaya").child("longitude").getValue().toString();
+                String latitude2 = dataSnapshot.child("location").child("lat_updated").getValue().toString();
+                String longitude2 = dataSnapshot.child("location").child("lng_updated").getValue().toString();
 
 
                 Double latCurrent = Double.parseDouble(latitude2);
@@ -104,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public double getMetersFromLatLong(double lat1, double lng1, double lat2, double lng2) {
 
         double theta = lng1 - lng2;
@@ -114,14 +106,12 @@ public class MainActivity extends AppCompatActivity {
                 * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515 * 1.6 * 1000;
-        int distBetweenTwoLocations = (int) Math.rint(dist);
+        dist = dist * 60 * 1.1515 * 1.6 * 1000;                //60 degrees in a mile * 1.15 miles * 1.6 to km
+        int distBetweenTwoLocations = (int) Math.rint(dist);   //return to closest integer value
 
-        if(distBetweenTwoLocations >= 50){
+        if(distBetweenTwoLocations >= 500){
             databaseReference.child("Alert").setValue(1);
-            //Intent i = new Intent(MainActivity.this, MyReceiver.class);
-            //PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 234324243, i, 0);
-            notificationCall();
+            notificationDialog();
         }
         else{
             databaseReference.child("Alert").setValue(0);
@@ -130,10 +120,6 @@ public class MainActivity extends AppCompatActivity {
         return distBetweenTwoLocations;
 
     }
-
-    /*private void sendBroadcast(PendingIntent pendingIntent) {
-        databaseReference.child("Alert").setValue(1);
-    }*/
 
 
     private double deg2rad(double deg) {
@@ -145,19 +131,35 @@ public class MainActivity extends AppCompatActivity {
         return (rad * 180.0 / Math.PI);
     }
 
-    public void notificationCall(){
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void notificationDialog() {
         Intent intent = new Intent(this, RetrieveMapActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setDefaults(NotificationCompat.DEFAULT_ALL).setSmallIcon(R.drawable.imageedit_35_6864498887__1_)
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICATION_CHANNEL_ID = "tutorialspoint_01";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            @SuppressLint("WrongConstant") NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_MAX);
+            // Configure the notification channel.
+            notificationChannel.setDescription("Sample Channel description");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.imageedit_35_6864498887__1_)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.imageedit_35_6864498887__1_))
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
+                .setTicker("Tutorialspoint")
+                //.setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle("Location Changed")
                 .setContentText("Tap to get Current Location")
-                .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());
     }
 
